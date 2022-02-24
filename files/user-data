@@ -1,0 +1,9 @@
+#!/bin/bash -xe
+yum -y update && yum install -y ruby wget jq
+cd ~ec2-user
+REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq .region -r`
+wget https://aws-codedeploy-${REGION}.s3.${REGION}.amazonaws.com/latest/install
+chmod +x ./install
+./install auto
+systemctl daemon-reload
+systemctl start codedeploy-agent
